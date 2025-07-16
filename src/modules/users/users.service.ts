@@ -1,11 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dtos/register-user.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dtos/login.dto';
+import { AuthService } from '../auth/auth.service';
+import { access } from 'fs';
+
 @Injectable()
 export class UsersService {
     constructor(
         private readonly prisma: PrismaService,
+        private readonly authService: AuthService,
     ) {}
 
     async register(registerDto: RegisterDto) {
@@ -36,5 +41,29 @@ export class UsersService {
         });
 
         return user;
+    }
+
+    async findByEmail(email: string) {
+        return this.prisma.user.findUnique({
+            where: { email },
+        });
+    }
+
+    async signin(loginDto: LoginDto) {
+        const user = await this.prisma.user.findUnique({
+            where: { email: loginDto.email },
+        });
+
+        if (!user || !await bcrypt.compare(loginDto.password, user.password)) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        const token = await this.authService.generateToken(user);
+        const { password, ...safe } = user;
+        
+        return {
+            user: safe, 
+            access_token: token,
+        };
     }
 }
