@@ -6,19 +6,19 @@ import { LoginDto } from './dtos/login.dto';
 
 @Controller('api')
 export class UsersController {
-    constructor(
-        private readonly usersService: UsersService,
-        private readonly authService: AuthService,
-    ) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
-    @Post('users')
-    async register(@Body() registerDto: RegisterDto) {
-        const user = await this.usersService.register(registerDto);
-        return this.authService.validateUser(user);
-    }
+  @Post('users')
+  async register(@Body() registerDto: RegisterDto) {
+    const user = await this.usersService.register(registerDto);
+    return this.authService.validateUser(user);
+  }
 
-    @Post('users/login')
-    async login(@Body() loginDto: LoginDto) {
-        return this.usersService.signin(loginDto);
-    }
+  @Post('users/login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.usersService.signin(loginDto);
+  }
 }

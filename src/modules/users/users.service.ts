@@ -8,62 +8,56 @@ import { access } from 'fs';
 
 @Injectable()
 export class UsersService {
-    constructor(
-        private readonly prisma: PrismaService,
-        private readonly authService: AuthService,
-    ) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly authService: AuthService,
+  ) {}
 
-    async register(registerDto: RegisterDto) {
-        const emailExits = await this.prisma.user.findUnique({
-            where: { email: registerDto.email },
-        });
+  async register(registerDto: RegisterDto) {
+    const emailExits = await this.prisma.user.findUnique({
+      where: { email: registerDto.email },
+    });
 
-        if (emailExits) {
-            throw new Error('Email already exists');
-        }
-
-        const usernameExists = await this.prisma.user.findUnique({
-            where: { username: registerDto.username },
-        });
-
-        if (usernameExists) {
-            throw new Error('Username already exists');
-        }
-
-        const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-        
-        const user = await this.prisma.user.create({
-            data: {
-                username: registerDto.username,
-                email: registerDto.email,
-                password: hashedPassword,
-            },
-        });
-
-        return user;
+    if (emailExits) {
+      throw new Error('Email already exists');
     }
 
-    async findByEmail(email: string) {
-        return this.prisma.user.findUnique({
-            where: { email },
-        });
+    const usernameExists = await this.prisma.user.findUnique({
+      where: { username: registerDto.username },
+    });
+
+    if (usernameExists) {
+      throw new Error('Username already exists');
     }
 
-    async signin(loginDto: LoginDto) {
-        const user = await this.prisma.user.findUnique({
-            where: { email: loginDto.email },
-        });
+    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+    
+    const user = await this.prisma.user.create({
+      data: {
+        username: registerDto.username,
+        email: registerDto.email,
+        password: hashedPassword,
+      },
+    });
 
-        if (!user || !await bcrypt.compare(loginDto.password, user.password)) {
-            throw new UnauthorizedException('Invalid credentials');
-        }
+    return user;
+  }
 
-        const token = await this.authService.generateToken(user);
-        const { password, ...safe } = user;
-        
-        return {
-            user: safe, 
-            access_token: token,
-        };
+  async signin(loginDto: LoginDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: loginDto.email },
+    });
+
+    if (!user || !await bcrypt.compare(loginDto.password, user.password)) {
+      throw new UnauthorizedException('Invalid credentials');
     }
+
+    const token = await this.authService.generateToken(user);
+    const { password, ...safe } = user;
+    
+    return {
+      user: safe, 
+      access_token: token,
+    };
+  }
 }
