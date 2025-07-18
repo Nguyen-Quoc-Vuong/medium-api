@@ -121,11 +121,7 @@ export class UsersService {
 
     if (updateDto.password) {
       if (updateDto.password !== updateDto.confirmPassword) {
-        throw new Error('Passwords do not match');
-      }
-
-      if (updateDto.password.length < 6) {
-        throw new Error('Password must be at least 6 characters long');
+        throw new Error('Password and password confirmation do not match');
       }
 
       updateData.password = await bcrypt.hash(updateDto.password, 10);
