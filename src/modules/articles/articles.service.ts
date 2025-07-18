@@ -95,7 +95,19 @@ export class ArticlesService {
     });
   }
 
-  async deleteArticle(slug: string) {
+  async deleteArticle(slug: string, currentUser: User) {
+    const article = await this.prisma.article.findUnique({
+      where: { slug },
+    });
+
+    if (!article) {
+      throw new Error('Article not found');
+    }
+
+    if (article.authorId !== currentUser.id) {
+      throw new Error('You are not allowed to delete this article');
+    }
+    
     return this.prisma.article.delete({
       where: { slug },
     });

@@ -31,8 +31,8 @@ export class ArticlesController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':slug')
-  async deleteArticle(@Param('slug') slug: string) {
-    return this.articlesService.deleteArticle(slug);
+  async deleteArticle(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
+    return this.articlesService.deleteArticle(slug, currentUser);
   }
 
 }
