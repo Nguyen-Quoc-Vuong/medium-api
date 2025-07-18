@@ -4,7 +4,8 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dtos/login.dto';
 import { AuthService } from '../auth/auth.service';
-import { access } from 'fs';
+import { UpdateUserDto } from './dtos/update-user.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +32,7 @@ export class UsersService {
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
-    
+
     const user = await this.prisma.user.create({
       data: {
         username: registerDto.username,
@@ -54,10 +55,92 @@ export class UsersService {
 
     const token = await this.authService.generateToken(user);
     const { password, ...safe } = user;
-    
+
     return {
-      user: safe, 
+      user: safe,
       access_token: token,
     };
+  }
+
+  async getProfile(username: string, currentUser?: User) {
+    const user = await this.prisma.user.findUnique({
+      where: { username },
+      select: {
+        email: true,
+        username: true,
+        bio: true,
+        image: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return {
+      profile: {
+        ...user,
+      }
+    };
+  }
+
+  async updateUser(currentUser: User, updateDto: UpdateUserDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: currentUser.id },
+    });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const updateData: any = {};
+
+    if (updateDto.email) {
+      const emailExists = await this.prisma.user.findUnique({
+        where: { email: updateDto.email },
+      });
+
+      if (emailExists) {
+        throw new Error('Email already exists');
+      }
+
+      updateData.email = updateDto.email;
+    }
+
+    if (updateDto.username) {
+      const usernameExists = await this.prisma.user.findUnique({
+        where: { username: updateDto.username },
+      });
+
+      if (usernameExists) {
+        throw new Error('Username already exists');
+      }
+
+      updateData.username = updateDto.username;
+    }
+
+    if (updateDto.password) {
+      if (updateDto.password !== updateDto.confirmPassword) {
+        throw new Error('Password and password confirmation do not match');
+      }
+
+      updateData.password = await bcrypt.hash(updateDto.password, 10);
+    }
+
+    if (updateDto.bio) {
+      updateData.bio = updateDto.bio;
+    }
+
+    if (updateDto.image) {
+      updateData.image = updateDto.image;
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: currentUser.id },
+      data: updateData,
+    });
+
+    const { password, ...safe } = updatedUser;
+    return safe;
   }
 }
