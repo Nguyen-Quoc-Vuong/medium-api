@@ -10,9 +10,18 @@ export class ArticlesService {
     private readonly prisma: PrismaService
   ) {}
 
-  async getArticle(slug: string) {
+  async getBySlug(slug: string) {
     const article = await this.prisma.article.findUnique({
       where: { slug },
+      include: {
+        author: {
+          select: {
+            username: true,
+            bio: true,
+            image: true,
+          },
+        },
+      },
     });
 
     if (!article) {
@@ -22,7 +31,7 @@ export class ArticlesService {
     return article;
   }
 
-  async createArticle(createArticleDto: CreateArticleDto, currentUser: User) {
+  async create(createArticleDto: CreateArticleDto, currentUser: User) {
     const slug = createArticleDto.title.toLowerCase().replace(/\s+/g, '-');
 
     const existingArticle = await this.prisma.article.findUnique({
@@ -61,7 +70,7 @@ export class ArticlesService {
     }
   }
 
-  async updateArticle(slug: string, updateArticleDto: UpdateArticleDto, currentUser: User) {
+  async updateBySlug(slug: string, updateArticleDto: UpdateArticleDto, currentUser: User) {
     const article = await this.prisma.article.findUnique({
       where: { slug },
     });
@@ -95,7 +104,7 @@ export class ArticlesService {
     });
   }
 
-  async deleteArticle(slug: string, currentUser: User) {
+  async deleteBySlug(slug: string, currentUser: User) {
     const article = await this.prisma.article.findUnique({
       where: { slug },
     });
@@ -107,7 +116,7 @@ export class ArticlesService {
     if (article.authorId !== currentUser.id) {
       throw new Error('You are not allowed to delete this article');
     }
-    
+
     return this.prisma.article.delete({
       where: { slug },
     });

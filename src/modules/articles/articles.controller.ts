@@ -13,26 +13,26 @@ export class ArticlesController {
   ) { }
 
   @Get(':slug')
-  async getArticle(@Param('slug') slug: string) {
-    return this.articlesService.getArticle(slug);
+  async getBySlug(@Param('slug') slug: string) {
+    return this.articlesService.getBySlug(slug);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Post()
-  async createArticle(@Body() createArticleDto: CreateArticleDto, @CurrentUser() currentUser: User) {
-    return this.articlesService.createArticle(createArticleDto, currentUser);
+  async create(@Body() createArticleDto: CreateArticleDto, @CurrentUser() currentUser: User) {
+    return this.articlesService.create(createArticleDto, currentUser);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':slug')
-  async updateArticle(@Param('slug') slug: string, @Body() updateArticleDto: UpdateArticleDto, @CurrentUser() currentUser: User) {
-    return this.articlesService.updateArticle(slug, updateArticleDto, currentUser);
+  async updateBySlug(@Param('slug') slug: string, @Body() updateArticleDto: UpdateArticleDto, @CurrentUser() currentUser: User) {
+    return this.articlesService.updateBySlug(slug, updateArticleDto, currentUser);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Delete(':slug')
-  async deleteArticle(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
-    return this.articlesService.deleteArticle(slug, currentUser);
+  async deleteBySlug(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
+    return this.articlesService.deleteBySlug(slug, currentUser);
   }
 
 }
