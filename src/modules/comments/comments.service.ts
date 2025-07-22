@@ -1,0 +1,104 @@
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { User } from '@prisma/client';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { MultipleCommentResponse, SingleCommentResponse } from '../common/type/comment-response.interface';
+
+@Injectable()
+export class CommentsService {
+  constructor(
+    private readonly prisma: PrismaService
+  ) {}
+
+  async create(slug: string, createComment: CreateCommentDto, currentUser: User): Promise<SingleCommentResponse> {
+    const article = await this.prisma.article.findUnique({
+      where: { slug },
+    });
+
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
+
+    const createdComment = await this.prisma.comment.create({
+      data: {
+        body: createComment.body,
+        article: { connect: { id: article.id } },
+        author: { connect: { id: currentUser.id } },
+      },
+      include: {
+        author: { select: { username: true, bio: true, image: true } }
+      }
+    });
+
+    return {
+      comment: {
+        id: createdComment.id,
+        createdAt: createdComment.createdAt,
+        body: createdComment.body,
+        author: {
+          ...createdComment.author,
+        }
+      }
+    };
+  }
+
+  async getComments(slug: string): Promise<MultipleCommentResponse> {
+    const article = await this.prisma.article.findUnique({
+      where: { slug }
+    });
+
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
+
+    const comments = await this.prisma.comment.findMany({
+      where: { articleId: article.id },
+      include: {
+        author: { select: { username: true, bio: true, image: true } }
+      }
+    });
+
+    return {
+      comments: comments.map(comment => ({
+        id: comment.id,
+        createdAt: comment.createdAt,
+        body: comment.body,
+        author: {
+          ...comment.author,
+        }
+      }))
+    };
+  }
+
+  async deleteBySlug(slug: string, id: number, currentUser: User): Promise<{ message: string; slug: string }> {
+    const article = await this.prisma.article.findUnique({
+      where: { slug }
+    });
+
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
+
+    const comment = await this.prisma.comment.findUnique({
+      where: { id }
+    });
+
+    if (!comment) {
+      throw new NotFoundException('Comment not found');
+    }
+
+    if (comment.articleId !== article.id) {
+      throw new BadRequestException('Comment does not belong to this article');
+    }
+
+    if (comment.authorId !== currentUser.id &&  article.authorId !== currentUser.id) {
+      throw new ForbiddenException('You are not allowed to delete this comment');
+    }
+
+    await this.prisma.comment.delete({
+      where: { id }
+    });
+
+    return { message: 'Comment deleted successfully', slug };
+  }
+}
