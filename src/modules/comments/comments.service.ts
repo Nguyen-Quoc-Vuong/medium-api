@@ -1,7 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { MultipleCommentResponse, SingleCommentResponse } from '../common/type/comment-response.interface';
 
 @Injectable()
 export class CommentsService {
@@ -9,7 +10,7 @@ export class CommentsService {
     private readonly prisma: PrismaService
   ) {}
 
-  async create(slug: string, createComment: CreateCommentDto, currentUser: User) {
+  async create(slug: string, createComment: CreateCommentDto, currentUser: User): Promise<SingleCommentResponse> {
     const article = await this.prisma.article.findUnique({
       where: { slug },
     });
@@ -41,7 +42,7 @@ export class CommentsService {
     };
   }
 
-  async getComments(slug: string, currentUser: User) {
+  async getComments(slug: string): Promise<MultipleCommentResponse> {
     const article = await this.prisma.article.findUnique({
       where: { slug }
     });
@@ -69,7 +70,7 @@ export class CommentsService {
     };
   }
 
-  async deleteBySlug(slug: string, id: number, currentUser: User) {
+  async deleteBySlug(slug: string, id: number, currentUser: User): Promise<{ message: string; slug: string }> {
     const article = await this.prisma.article.findUnique({
       where: { slug }
     });
@@ -86,7 +87,11 @@ export class CommentsService {
       throw new NotFoundException('Comment not found');
     }
 
-    if (comment.authorId !== currentUser.id) {
+    if (comment.articleId !== article.id) {
+      throw new BadRequestException('Comment does not belong to this article');
+    }
+
+    if (comment.authorId !== currentUser.id &&  article.authorId !== currentUser.id) {
       throw new ForbiddenException('You are not allowed to delete this comment');
     }
 

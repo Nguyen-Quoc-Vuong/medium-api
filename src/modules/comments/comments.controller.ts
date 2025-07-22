@@ -15,10 +15,9 @@ export class CommentsController {
     return this.commentsService.create(slug, createComment, currentUser);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get(':slug/comments')
-  async getComments(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
-    return this.commentsService.getComments(slug, currentUser);
+  async getComments(@Param('slug') slug: string) {
+    return this.commentsService.getComments(slug);
   }
 
   @UseGuards(AuthGuard('jwt'))
