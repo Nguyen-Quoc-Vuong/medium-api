@@ -35,4 +35,15 @@ export class ArticlesController {
     return this.articlesService.deleteBySlug(slug, currentUser);
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':slug/favorite')
+  async favorite(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
+    return this.articlesService.favorite(slug, currentUser);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':slug/favorite')
+  async unfavorite(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
+    return this.articlesService.unfavorite(slug, currentUser);
+  }
 }

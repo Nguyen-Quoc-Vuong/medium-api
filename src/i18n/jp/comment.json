@@ -1,0 +1,17 @@
+{
+  "errors": {
+    "commentNotFound": "コメントが見つかりません",
+    "articleNotFound": "記事が見つかりません",
+    "notAuthorized": "このコメントを編集する権限がありません",
+    "cannotDeleteComment": "このコメントを削除できません",
+    "commentWrongArticle": "このコメントは記事に属していません"
+  },
+  "success": {
+    "created": "コメントが作成されました",
+    "updated": "コメントが更新されました",
+    "deleted": "コメントが削除されました"
+  },
+  "validation": {
+    "bodyRequired": "コメントの本文は必須です"
+  }
+}

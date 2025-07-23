@@ -1,0 +1,27 @@
+{
+  "errors": {
+    "notFound": "ユーザーが見つかりません",
+    "emailExists": "メールアドレスは既に存在します",
+    "usernameExists": "ユーザー名は既に使用されています",
+    "cannotFollowSelf": "自分自身をフォローすることはできません",
+    "cannotUnfollowSelf": "自分自身のフォローを解除することはできません",
+    "notFollowing": "フォローしていません",
+    "cannotUpdateUser": "ユーザー情報を更新できません",
+    "invalidUserData": "無効なユーザー情報が提供されました"
+  },
+  "success": {
+    "profileUpdated": "プロフィールが正常に更新されました",
+    "userCreated": "ユーザーが正常に作成されました",
+    "userDeleted": "ユーザーが正常に削除されました",
+    "followSuccess": "ユーザーを正常にフォローしました",
+    "unfollowSuccess": "ユーザーのフォローを正常に解除しました"
+  },
+  "validation": {
+    "emailRequired": "メールアドレスは必須です",
+    "usernameRequired": "ユーザー名は必須です",
+    "invalidEmail": "無効なメールアドレス形式です",
+    "usernameTooShort": "ユーザー名は最低3文字必要です",
+    "bioTooLong": "自己紹介が長すぎます",
+    "invalidImageUrl": "無効な画像URL形式です"
+  }
+}

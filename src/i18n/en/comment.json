@@ -1,0 +1,17 @@
+{
+  "errors": {
+    "commentNotFound":    "Comment not found",
+    "articleNotFound":    "Article not found for comment",
+    "notAuthorized":      "You are not authorized to edit this comment",
+    "cannotDeleteComment":"You cannot delete this comment",
+    "commentWrongArticle": "Comment does not belong to article"
+  },
+  "success": {
+    "created": "Comment created successfully",
+    "updated": "Comment updated successfully",
+    "deleted": "Comment deleted successfully"
+  },
+  "validation": {
+    "bodyRequired": "Comment body is required"
+  }
+}

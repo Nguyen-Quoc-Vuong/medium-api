@@ -1,0 +1,25 @@
+{
+  "errors": {
+    "titleExists": "記事はすでに存在します",
+    "notFound": "記事が見つかりません",
+    "authorNotFound": "記事の作成者が見つかりません",
+    "alreadyFavorited": "この記事はすでにお気に入りに登録されています",
+    "notFavorited": "この記事はまだお気に入りに登録されていません",
+    "cannotUpdateArticle": "この記事を更新することはできません",
+    "cannotDeleteArticle": "この記事を削除することはできません"
+  },
+  "success": {
+    "created": "記事が作成されました",
+    "updated": "記事が更新されました",
+    "deleted": "記事が削除されました",
+    "favorited": "記事をお気に入りに登録しました",
+    "unfavorited": "記事のお気に入り登録を解除しました"
+  },
+  "validation": {
+    "titleRequired": "タイトルは必須です",
+    "descriptionRequired": "説明は必須です",
+    "bodyRequired": "本文は必須です",
+    "titleTooLong": "タイトルが長すぎます",
+    "descriptionTooLong": "説明が長すぎます"
+  }
+}
