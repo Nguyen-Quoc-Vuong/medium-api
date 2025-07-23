@@ -1,13 +1,15 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { MultipleCommentResponse, SingleCommentResponse } from '../common/type/comment-response.interface';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class CommentsService {
   constructor(
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
+    private readonly i18n: I18nService
   ) {}
 
   async create(slug: string, createComment: CreateCommentDto, currentUser: User): Promise<SingleCommentResponse> {
@@ -16,7 +18,7 @@ export class CommentsService {
     });
 
     if (!article) {
-      throw new NotFoundException('Article not found');
+      throw new NotFoundException(this.i18n.translate('article.errors.articleNotFound'));
     }
 
     const createdComment = await this.prisma.comment.create({
@@ -48,7 +50,7 @@ export class CommentsService {
     });
 
     if (!article) {
-      throw new NotFoundException('Article not found');
+      throw new NotFoundException(this.i18n.translate('article.errors.articleNotFound'));
     }
 
     const comments = await this.prisma.comment.findMany({
@@ -76,7 +78,7 @@ export class CommentsService {
     });
 
     if (!article) {
-      throw new NotFoundException('Article not found');
+      throw new NotFoundException(this.i18n.translate('comment.errors.articleNotFound'));
     }
 
     const comment = await this.prisma.comment.findUnique({
@@ -84,21 +86,23 @@ export class CommentsService {
     });
 
     if (!comment) {
-      throw new NotFoundException('Comment not found');
+      throw new NotFoundException(this.i18n.translate('comment.errors.commentNotFound'));
     }
 
     if (comment.articleId !== article.id) {
-      throw new BadRequestException('Comment does not belong to this article');
+      throw new BadRequestException(this.i18n.translate('comment.errors.commentWrongArticle', {
+          args: { slug }
+        }));
     }
 
     if (comment.authorId !== currentUser.id &&  article.authorId !== currentUser.id) {
-      throw new ForbiddenException('You are not allowed to delete this comment');
+      throw new ForbiddenException(this.i18n.translate('comment.errors.cannotDeleteComment'));
     }
 
     await this.prisma.comment.delete({
       where: { id }
     });
 
-    return { message: 'Comment deleted successfully', slug };
+    return { message: this.i18n.translate('comment.success.deleted'), slug };
   }
 }

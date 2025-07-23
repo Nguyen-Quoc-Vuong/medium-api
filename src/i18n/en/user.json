@@ -1,0 +1,27 @@
+{
+  "errors": {
+    "notFound": "User not found",
+    "emailExists": "Email already exists",
+    "usernameExists": "Username is already taken",
+    "cannotFollowSelf": "You cannot follow yourself",
+    "cannotUnfollowSelf": "You cannot unfollow yourself",
+    "notFollowing": "You are not following",
+    "cannotUpdateUser": "Cannot update user information",
+    "invalidUserData": "Invalid user data provided"
+  },
+  "success": {
+    "profileUpdated": "Profile updated successfully",
+    "userCreated": "User created successfully",
+    "userDeleted": "User deleted successfully",
+    "followSuccess": "User followed successfully",
+    "unfollowSuccess": "User unfollowed successfully"
+  },
+  "validation": {
+    "emailRequired": "Email is required",
+    "usernameRequired": "Username is required",
+    "invalidEmail": "Invalid email format",
+    "usernameTooShort": "Username must be at least 3 characters",
+    "bioTooLong": "Bio is too long",
+    "invalidImageUrl": "Invalid image URL format"
+  }
+}

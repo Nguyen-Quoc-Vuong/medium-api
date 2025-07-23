@@ -1,0 +1,27 @@
+{
+  "errors": {
+    "notFound": "Không tìm thấy người dùng",
+    "emailExists": "Địa chỉ email đã tồn tại",
+    "usernameExists": "Tên người dùng đã được sử dụng",
+    "cannotFollowSelf": "Bạn không thể theo dõi chính mình",
+    "cannotUnfollowSelf": "Bạn không thể hủy theo dõi chính mình",
+    "notFollowing": "Bạn chưa theo dõi",
+    "cannotUpdateUser": "Không thể cập nhật thông tin người dùng",
+    "invalidUserData": "Dữ liệu người dùng không hợp lệ"
+  },
+  "success": {
+    "profileUpdated": "Cập nhật hồ sơ thành công",
+    "userCreated": "Tạo người dùng thành công",
+    "userDeleted": "Xóa người dùng thành công",
+    "followSuccess": "Theo dõi người dùng thành công",
+    "unfollowSuccess": "Hủy theo dõi người dùng thành công"
+  },
+  "validation": {
+    "emailRequired": "Email là bắt buộc",
+    "usernameRequired": "Tên người dùng là bắt buộc",
+    "invalidEmail": "Định dạng email không hợp lệ",
+    "usernameTooShort": "Tên người dùng phải có ít nhất 3 ký tự",
+    "bioTooLong": "Tiểu sử quá dài",
+    "invalidImageUrl": "Định dạng URL hình ảnh không hợp lệ"
+  }
+}
