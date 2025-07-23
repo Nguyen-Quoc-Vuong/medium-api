@@ -7,7 +7,10 @@
     "cannotUnfollowSelf": "自分自身のフォローを解除することはできません",
     "notFollowing": "フォローしていません",
     "cannotUpdateUser": "ユーザー情報を更新できません",
-    "invalidUserData": "無効なユーザー情報が提供されました"
+    "invalidUserData": "無効なユーザー情報が提供されました",
+    "invalidCredentials": "無効な認証情報です",
+    "passwordMismatch": "パスワードと確認パスワードが一致しません",
+    "alreadyFollowing": "既にこのユーザーをフォローしています"
   },
   "success": {
     "profileUpdated": "プロフィールが正常に更新されました",
@@ -22,6 +25,7 @@
     "invalidEmail": "無効なメールアドレス形式です",
     "usernameTooShort": "ユーザー名は最低3文字必要です",
     "bioTooLong": "自己紹介が長すぎます",
-    "invalidImageUrl": "無効な画像URL形式です"
+    "invalidImageUrl": "無効な画像URL形式です",
+    "bioMustBeString": "自己紹介は文字列でなければなりません"
   }
 }
