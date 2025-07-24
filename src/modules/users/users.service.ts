@@ -7,6 +7,8 @@ import { AuthService } from '../auth/auth.service';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { User } from '@prisma/client';
 import { I18nService } from 'nestjs-i18n';
+import { ProfileResponseData } from '../common/type/profile-response.interface';
+import { UserResponseData } from '../common/type/user-response.interface';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +18,7 @@ export class UsersService {
     private readonly i18n: I18nService
   ) { }
 
-  async register(registerDto: RegisterDto) {
+  async register(registerDto: RegisterDto): Promise<UserResponseData> {
     const emailExits = await this.prisma.user.findUnique({
       where: { email: registerDto.email },
     });
@@ -47,10 +49,10 @@ export class UsersService {
       },
     });
 
-    return user;
+    return this.getUserResponse(user);
   }
 
-  async signin(loginDto: LoginDto) {
+  async signin(loginDto: LoginDto): Promise<UserResponseData> {
     const user = await this.prisma.user.findUnique({
       where: { email: loginDto.email },
     });
@@ -61,16 +63,10 @@ export class UsersService {
       );
     }
 
-    const token = await this.authService.generateToken(user);
-    const { password, ...safe } = user;
-
-    return {
-      user: safe,
-      access_token: token,
-    };
+    return this.getUserResponse(user);
   }
 
-  async getProfile(username: string, currentUser?: User) {
+  async getProfile(username: string, currentUser?: User): Promise<ProfileResponseData> {
     const user = await this.prisma.user.findUnique({
       where: { username },
       select: {
@@ -95,7 +91,7 @@ export class UsersService {
       ? user.followedBy.some(follower => follower.id === currentUser.id)
       : false;
 
-    return this.getProfileResponseFollow(user, currentUser);
+    return this.getProfileResponse(user, currentUser);
   }
 
   async updateUser(currentUser: User, updateDto: UpdateUserDto) {
@@ -166,7 +162,7 @@ export class UsersService {
     return safe;
   }
 
-  async followUser(currentUser: User, username: string) {
+  async followUser(currentUser: User, username: string): Promise<ProfileResponseData> {
     const userToFollow = await this.prisma.user.findUnique({
       where: { username },
     });
@@ -207,10 +203,10 @@ export class UsersService {
       },
     });
 
-    return this.getProfileResponseFollow(userToFollow, currentUser);
+    return this.getProfileResponse(userToFollow, currentUser);
   }
 
-  async unfollowUser(currentUser: User, username: string) {
+  async unfollowUser(currentUser: User, username: string): Promise<ProfileResponseData> {
     const userToUnfollow = await this.prisma.user.findUnique({
       where: { username },
     });
@@ -251,10 +247,10 @@ export class UsersService {
       },
     });
 
-    return this.getProfileResponseFollow(userToUnfollow, currentUser);
+    return this.getProfileResponse(userToUnfollow, currentUser);
   }
 
-  private async getProfileResponseFollow(user: any, currentUser?: User) {
+  private async getProfileResponse(user: any, currentUser?: User): Promise<ProfileResponseData> {
     let isFollowing = false;
 
     if (currentUser) {
@@ -277,5 +273,9 @@ export class UsersService {
         following: isFollowing,
       },
     };
+  }
+
+  private async getUserResponse(user: User): Promise<UserResponseData> {
+    return this.authService.validateUser(user);
   }
 }
