@@ -1,6 +1,6 @@
 import { IsNotEmpty } from "class-validator";
 
 export class CreateCommentDto {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'comment.validation.bodyRequired' })
   body: string;
 }

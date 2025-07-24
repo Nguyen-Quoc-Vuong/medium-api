@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthService } from '../auth/auth.service';
 import { RegisterDto } from './dtos/register-user.dto';
@@ -17,8 +17,7 @@ export class UsersController {
 
   @Post('users')
   async register(@Body() registerDto: RegisterDto) {
-    const user = await this.usersService.register(registerDto);
-    return this.authService.validateUser(user);
+    return this.usersService.register(registerDto);
   }
 
   @Post('users/login')
@@ -33,7 +32,8 @@ export class UsersController {
   }
 
   @Get('profile/:username')
-  async getProfile(@Param('username') username: string, @CurrentUser() currentUser: User) {
+  @UseGuards(AuthGuard('jwt'))
+  async getProfile(@Param('username') username: string, @CurrentUser() currentUser?: User) {
     return this.usersService.getProfile(username, currentUser);
   }
 
@@ -41,5 +41,17 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   async updateUser(@Body() updateDto: UpdateUserDto, @CurrentUser() currentUser: User) {
    return this.usersService.updateUser(currentUser, updateDto);
+  }
+
+  @Post('profiles/:username/follow')
+  @UseGuards(AuthGuard('jwt'))
+  async followUser(@Param('username') username: string, @CurrentUser() currentUser: User) {
+    return this.usersService.followUser(currentUser, username);
+  }
+
+  @Delete('profiles/:username/follow')
+  @UseGuards(AuthGuard('jwt'))
+  async unfollowUser(@Param('username') username: string, @CurrentUser() currentUser: User) {
+    return this.usersService.unfollowUser(currentUser, username);
   }
 }

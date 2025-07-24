@@ -20,6 +20,11 @@
     "descriptionRequired": "Description is required",
     "bodyRequired": "Body is required",
     "titleTooLong": "Title is too long",
-    "descriptionTooLong": "Description is too long"
+    "descriptionTooLong": "Description is too long",
+    "titleMustBeString": "Title must be a string",
+    "descriptionMustBeString": "Description must be a string",
+    "bodyMustBeString": "Body must be a string",
+    "tagListMustBeArray": "Tag list must be an array",
+    "tagMustBeString": "Each tag must be a string"
   }
 }

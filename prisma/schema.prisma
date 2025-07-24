@@ -25,7 +25,8 @@ model User {
   articles  Article[] @relation("UserArticles")
   comment   Comment[]
   favorites  Article[] @relation("UserFavorites")
-
+  followedBy User[]    @relation("UserFollows")
+  following  User[]    @relation("UserFollows")
 }
 
 model Article {

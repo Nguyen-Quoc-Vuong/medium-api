@@ -2,23 +2,23 @@ import { IsOptional, IsString, MinLength, IsEmail, IsNotEmpty } from "class-vali
 
 export class UpdateUserDto {
   @IsOptional()
-  @IsEmail()
+  @IsEmail({}, { message: 'user.validation.invalidEmail' })
   email?: string;
 
   @IsOptional()
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({ message: 'user.validation.usernameRequired' })
+  @IsString({ message: 'user.validation.usernameMustBeString' })
   username?: string;
 
   @IsOptional()
-  @MinLength(6)
+  @MinLength(6, { message: 'auth.validation.passwordTooShort' })
   password?: string;
 
   @IsOptional()
   confirmPassword?: string;
 
   @IsOptional()
-  @IsString()
+  @IsString({ message: 'user.validation.bioMustBeString' })
   bio?: string;
 
   @IsOptional()

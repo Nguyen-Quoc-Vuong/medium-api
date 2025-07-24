@@ -7,7 +7,10 @@
     "cannotUnfollowSelf": "You cannot unfollow yourself",
     "notFollowing": "You are not following",
     "cannotUpdateUser": "Cannot update user information",
-    "invalidUserData": "Invalid user data provided"
+    "invalidUserData": "Invalid user data provided",
+    "invalidCredentials": "Invalid credentials",
+    "passwordMismatch": "Password and password confirmation do not match",
+    "alreadyFollowing": "You are already following this user"
   },
   "success": {
     "profileUpdated": "Profile updated successfully",
@@ -22,6 +25,7 @@
     "invalidEmail": "Invalid email format",
     "usernameTooShort": "Username must be at least 3 characters",
     "bioTooLong": "Bio is too long",
-    "invalidImageUrl": "Invalid image URL format"
+    "invalidImageUrl": "Invalid image URL format",
+    "bioMustBeString": "Bio must be a string"
   }
 }

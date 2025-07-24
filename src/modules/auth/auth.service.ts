@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { User } from '@prisma/client';
+import { UserResponseData } from '../common/type/user-response.interface';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +18,7 @@ export class AuthService {
     });
   }
 
-  async validateUser(user: User) {
+  async validateUser(user: User): Promise<UserResponseData> {
     return {
       user: {
         email: user.email,
