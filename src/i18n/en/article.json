@@ -25,6 +25,10 @@
     "descriptionMustBeString": "Description must be a string",
     "bodyMustBeString": "Body must be a string",
     "tagListMustBeArray": "Tag list must be an array",
-    "tagMustBeString": "Each tag must be a string"
+    "tagMustBeString": "Each tag must be a string",
+    "authorMustBeString": "Author must be a string",
+    "favoritedMustBeString": "Favorited's name must be a string",
+    "limitMustBeNumber": "Limit must be a number",
+    "offsetMustBeNumber": "Offset must be a number"
   }
 }

@@ -4,7 +4,9 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { User } from '@prisma/client';
 import { I18nService } from 'nestjs-i18n';
-import { Article, ArticleResponseData, SingleArticleResponse } from '../common/type/article-response.interface';
+import { Article, ArticleResponseData, MultipleArticleResponse, SingleArticleResponse } from '../common/type/article-response.interface';
+import { ListArticlesQueryDto } from './dto/list-articles.query.dto';
+import { LIMIT_DEFAULT, OFFSET_DEFAULT } from '../common/constaints/constaints';
 
 @Injectable()
 export class ArticlesService {
@@ -191,7 +193,7 @@ export class ArticlesService {
         this.i18n.translate('article.errors.notFound')
       );
     }
-    
+
     const updated = await this.prisma.article.update({
       where: { slug },
       data: {
@@ -204,6 +206,29 @@ export class ArticlesService {
     });
     return {
       article: this.ArticleResponse(updated, currentUser.id),
+    };
+  }
+
+  async getListArticles(query: ListArticlesQueryDto, currentUser?: User): Promise<MultipleArticleResponse> {
+    const { tag, author, favorited } = query;
+    const limit = query.limit || LIMIT_DEFAULT;
+    const offset = query.offset || OFFSET_DEFAULT;
+
+    const articles = await this.prisma.article.findMany({
+      take: limit,
+      skip: offset,
+      include: {
+        author: { select: { username: true, bio: true, image: true } },
+        favoritedBy: { select: { id: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const articleResponse = articles.map((article) => this.ArticleResponse(article, currentUser?.id));
+
+    return {
+      articlesCount: articleResponse.length,
+      articles: articleResponse,
     };
   }
 

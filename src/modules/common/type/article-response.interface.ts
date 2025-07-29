@@ -47,7 +47,7 @@ export interface SingleArticleResponse {
   article: ArticleResponseData;
 }
 
-export interface MutlipleArticleResponse {
+export interface MultipleArticleResponse {
   articlesCount: number;
   articles: ArticleResponseData[];
 }

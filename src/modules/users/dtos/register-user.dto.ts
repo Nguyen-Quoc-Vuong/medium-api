@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { MIN_PASSWORD_LENGTH } from 'src/modules/common/constaints/constaints';
 
 export class RegisterDto {
   @IsNotEmpty({ message: 'auth.validation.emptyUsername' })
@@ -9,6 +10,6 @@ export class RegisterDto {
   email: string;
 
   @IsNotEmpty({ message: 'auth.validation.passwordRequired' })
-  @MinLength(6, { message: 'auth.validation.passwordTooShort' })
+  @MinLength(MIN_PASSWORD_LENGTH, { message: 'auth.validation.passwordTooShort' })
   password: string;
 }

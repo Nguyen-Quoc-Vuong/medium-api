@@ -7,6 +7,7 @@ import { User } from '.prisma/client/default';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { OptionalJwtAuthGuard } from '../auth/optional-jwt-authguard';
 
 @Controller('api')
 export class UsersController {
@@ -32,7 +33,7 @@ export class UsersController {
   }
 
   @Get('profile/:username')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(OptionalJwtAuthGuard)
   async getProfile(@Param('username') username: string, @CurrentUser() currentUser?: User) {
     return this.usersService.getProfile(username, currentUser);
   }

@@ -9,6 +9,7 @@ import { User } from '@prisma/client';
 import { I18nService } from 'nestjs-i18n';
 import { ProfileResponseData } from '../common/type/profile-response.interface';
 import { UserResponseData } from '../common/type/user-response.interface';
+import { BCRYPT_SALT_ROUNDS } from '../common/constaints/constaints';
 
 @Injectable()
 export class UsersService {
@@ -39,7 +40,7 @@ export class UsersService {
       );
     }
 
-    const hashedPassword = await bcrypt.hash(registerDto.password, 10);
+    const hashedPassword = await bcrypt.hash(registerDto.password, BCRYPT_SALT_ROUNDS);
 
     const user = await this.prisma.user.create({
       data: {
