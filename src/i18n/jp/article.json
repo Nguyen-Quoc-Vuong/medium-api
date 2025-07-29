@@ -20,6 +20,11 @@
     "descriptionRequired": "説明は必須です",
     "bodyRequired": "本文は必須です",
     "titleTooLong": "タイトルが長すぎます",
-    "descriptionTooLong": "説明が長すぎます"
+    "descriptionTooLong": "説明が長すぎます",
+    "titleMustBeString": "タイトルは文字列である必要があります",
+    "descriptionMustBeString": "説明は文字列である必要があります",
+    "bodyMustBeString": "本文は文字列である必要があります",
+    "tagListMustBeArray": "タグリストは配列である必要があります",
+    "tagMustBeString": "各タグは文字列である必要があります"
   }
 }

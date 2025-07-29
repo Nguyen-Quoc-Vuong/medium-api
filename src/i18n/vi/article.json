@@ -20,6 +20,11 @@
     "descriptionRequired": "Mô tả là bắt buộc",
     "bodyRequired": "Nội dung là bắt buộc",
     "titleTooLong": "Tiêu đề quá dài",
-    "descriptionTooLong": "Mô tả quá dài"
+    "descriptionTooLong": "Mô tả quá dài",
+    "titleMustBeString": "Tiêu đề phải là chuỗi ký tự",
+    "descriptionMustBeString": "Mô tả phải là chuỗi ký tự",
+    "bodyMustBeString": "Nội dung phải là chuỗi ký tự",
+    "tagListMustBeArray": "Danh sách thẻ phải là mảng",
+    "tagMustBeString": "Mỗi thẻ phải là chuỗi ký tự"
   }
 }
