@@ -211,10 +211,31 @@ export class ArticlesService {
 
   async getListArticles(query: ListArticlesQueryDto, currentUser?: User): Promise<MultipleArticleResponse> {
     const { tag, author, favorited } = query;
-    const limit = query.limit || LIMIT_DEFAULT;
-    const offset = query.offset || OFFSET_DEFAULT;
+    const limit = Number(query.limit) || LIMIT_DEFAULT;
+    const offset = Number(query.offset) || OFFSET_DEFAULT;
+
+    const where: any = {};
+
+    if (tag) {
+      where.tagList = {
+        contains: tag,
+      };
+    }
+
+    if (author) {
+      where.author = {
+        username: author,
+      };
+    }
+
+    if (favorited) {
+      where.favoritedBy = {
+        some: { username: favorited },
+      };
+    }
 
     const articles = await this.prisma.article.findMany({
+      where,
       take: limit,
       skip: offset,
       include: {
@@ -225,10 +246,23 @@ export class ArticlesService {
     });
 
     const articleResponse = articles.map((article) => this.ArticleResponse(article, currentUser?.id));
+    const currentPage = Math.floor(offset / limit) + 1;
+    const totalPages = Math.ceil(await this.prisma.article.count() / limit);
+    const hasNextPage = currentPage < totalPages;
+    const hasPreviousPage = currentPage > 1;
 
     return {
       articlesCount: articleResponse.length,
       articles: articleResponse,
+      pagination: {
+        currentPage,
+        perPage: limit,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+        nextPage: hasNextPage ? currentPage + 1 : null,
+        previousPage: hasPreviousPage ? currentPage - 1 : null,
+      }
     };
   }
 

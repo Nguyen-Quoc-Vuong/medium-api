@@ -43,6 +43,16 @@ export interface ArticleResponseData {
   };
 }
 
+export interface PaginationInfo{
+  currentPage: number;
+  perPage: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  nextPage: number | null;
+  previousPage: number | null;
+}
+
 export interface SingleArticleResponse {
   article: ArticleResponseData;
 }
@@ -50,4 +60,5 @@ export interface SingleArticleResponse {
 export interface MultipleArticleResponse {
   articlesCount: number;
   articles: ArticleResponseData[];
+  pagination: PaginationInfo;
 }
