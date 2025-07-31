@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { User } from '@prisma/client';
+import { ListArticlesQueryDto } from './dto/list-articles.query.dto';
+import { OptionalJwtAuthGuard } from '../auth/optional-jwt-authguard';
 
 @Controller('api/articles')
 export class ArticlesController {
@@ -45,5 +47,11 @@ export class ArticlesController {
   @Delete(':slug/favorite')
   async unfavorite(@Param('slug') slug: string, @CurrentUser() currentUser: User) {
     return this.articlesService.unfavorite(slug, currentUser);
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @Get()
+  async getListArticles(@Query() query: ListArticlesQueryDto, @CurrentUser() currentUser?: User) {
+    return this.articlesService.getListArticles(query, currentUser);
   }
 }

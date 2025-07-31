@@ -25,6 +25,10 @@
     "descriptionMustBeString": "説明は文字列である必要があります",
     "bodyMustBeString": "本文は文字列である必要があります",
     "tagListMustBeArray": "タグリストは配列である必要があります",
-    "tagMustBeString": "各タグは文字列である必要があります"
+    "tagMustBeString": "各タグは文字列である必要があります",
+    "authorMustBeString": "作成者は文字列である必要があります",
+    "favoritedMustBeString": "お気に入りの名前は文字列である必要があります",
+    "limitMustBeNumber": "制限は数値である必要があります",
+    "offsetMustBeNumber": "オフセットは数値である必要があります"
   }
 }

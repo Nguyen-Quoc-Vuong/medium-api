@@ -1,4 +1,5 @@
 import { IsOptional, IsString, MinLength, IsEmail, IsNotEmpty } from "class-validator";
+import { MIN_PASSWORD_LENGTH } from "src/modules/common/constaints/constaints";
 
 export class UpdateUserDto {
   @IsOptional()
@@ -11,7 +12,7 @@ export class UpdateUserDto {
   username?: string;
 
   @IsOptional()
-  @MinLength(6, { message: 'auth.validation.passwordTooShort' })
+  @MinLength(MIN_PASSWORD_LENGTH, { message: 'auth.validation.passwordTooShort' })
   password?: string;
 
   @IsOptional()

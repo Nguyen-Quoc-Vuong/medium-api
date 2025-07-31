@@ -25,6 +25,10 @@
     "descriptionMustBeString": "Mô tả phải là chuỗi ký tự",
     "bodyMustBeString": "Nội dung phải là chuỗi ký tự",
     "tagListMustBeArray": "Danh sách thẻ phải là mảng",
-    "tagMustBeString": "Mỗi thẻ phải là chuỗi ký tự"
+    "tagMustBeString": "Mỗi thẻ phải là chuỗi ký tự",
+    "authorMustBeString": "Tác giả phải là chuỗi ký tự",
+    "favoritedMustBeString": "Tên người yêu thích phải là chuỗi ký tự",
+    "limitMustBeNumber": "Giới hạn phải là số",
+    "offsetMustBeNumber": "Offset phải là số"
   }
 }
